@@ -1,5 +1,6 @@
 package com.jfahey.notes.controller;
 
+import com.jfahey.notes.exception.InvalidAuthenticationTokenException;
 import com.jfahey.notes.exception.NoteNotFoundException;
 import com.jfahey.notes.model.api.NoteAPI;
 import com.jfahey.notes.model.entity.Note;
@@ -112,14 +113,14 @@ public class NotesController {
 
     private String getUserIdFromToken(Jwt accessToken) {
         if (accessToken == null) {
-            throw new RuntimeException("No Valid Access Token.");
+            throw new InvalidAuthenticationTokenException("No Valid Access Token.");
         }
 
         String userId = accessToken.getClaimAsString(USER_ID_CLAIM);
         if (StringUtils.hasText(userId)) {
             return userId;
         } else {
-            throw new RuntimeException("Invalid Access Token.");
+            throw new InvalidAuthenticationTokenException("Invalid Access Token.");
         }
     }
 }
