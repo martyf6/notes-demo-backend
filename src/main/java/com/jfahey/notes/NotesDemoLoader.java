@@ -13,13 +13,12 @@ public class NotesDemoLoader implements CommandLineRunner {
     private final NoteRepository noteRepository;
 
     public NotesDemoLoader(NoteRepository noteRepository) {
-
         this.noteRepository = noteRepository;
     }
 
     @Override
     public void run(String... strings) throws Exception {
-        noteRepository.save(
-                new Note("admin123", "Welcome Greeting", "Hello! This is a note."));
+        Note demoNote = new Note("admin123", "Welcome Greeting", "Hello! This is a note.");
+        noteRepository.save(demoNote);
     }
 }

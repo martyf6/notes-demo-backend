@@ -3,6 +3,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer: https://dev-unvzv7l7x8a8ftr5.us.auth0.com/
-          jwk-set-uri: https://dev-unvzv7l7x8a8ftr5.us.auth0.com/.well-known/jwks.json
-          #audience: https://notes/api
+          issuer: ${ISSUER_URI}
