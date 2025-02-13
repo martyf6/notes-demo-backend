@@ -1,5 +1,6 @@
 package com.jfahey.notes.util;
 
+import com.jfahey.notes.model.api.NoteAPI;
 import com.jfahey.notes.model.entity.Note;
 import com.jfahey.notes.model.entity.User;
 
@@ -34,5 +35,34 @@ public class TestFixture {
         note.setCreated(TS);
         note.setLastUpdated(TS);
         return note;
+    }
+
+    public static NoteAPI getNewNoteApi() {
+        return NoteAPI.builder()
+                .title("My Title")
+                .content("My Content")
+                .build();
+    }
+
+    public static NoteAPI getExistingNoteApi() {
+        return NoteAPI.builder()
+                .id(UUID.fromString("f474f326-ecfe-4382-ba00-d7c5d8344d1b"))
+                .title("My Title")
+                .content("My Content")
+                .created(TS)
+                .lastUpdated(TS)
+                .build();
+    }
+
+    public static String getExistingNoteJSON() {
+        return """
+            {
+                "id": "f474f326-ecfe-4382-ba00-d7c5d8344d1b",
+                "title": "My Title",
+                "content": "My Content",
+                "created": "2024-01-01T00:00:00Z",
+                "lastUpdated": "2024-01-01T00:00:00Z"
+            }
+            """;
     }
 }

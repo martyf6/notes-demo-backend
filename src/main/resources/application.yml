@@ -1,6 +1,23 @@
+# ==================================================
+# Spring
+# ==================================================
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer: ${ISSUER_URI}
+  mvc:
+    problemdetails:
+      enabled: true
+
+# ==================================================
+# CORS
+# ==================================================
+cors:
+  allowed-origin-patterns: "http://localhost:3000"
+  allowed-methods: "*"
+  allowed-headers: "*"
+  exposed-headers: "Authorization"
+  allow-credentials: true
+  max-age: 1800

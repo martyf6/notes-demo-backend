@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/notes")
 @Slf4j
@@ -97,11 +95,11 @@ public class NotesController {
 
     @GetMapping({"", "/", "/all"})
     public ResponseEntity<List<NoteAPI>> list(
-            @AuthenticationPrincipal Jwt principal
-    ) {
+            @AuthenticationPrincipal Jwt principal) {
 
         String userId = getUserIdFromToken(principal);
         log.info("Getting all notes for user: {}", userId);
+
         List<NoteAPI> notesResponse = noteService.getNotesByUserId(userId).stream()
                 .map(NoteMapper::toAPI)
                 .toList();
@@ -109,14 +107,12 @@ public class NotesController {
         return ResponseEntity.ok(notesResponse);
     }
 
-    private static final String USER_ID_CLAIM = "sub";
-
     private String getUserIdFromToken(Jwt accessToken) {
         if (accessToken == null) {
             throw new InvalidAuthenticationTokenException("No Valid Access Token.");
         }
 
-        String userId = accessToken.getClaimAsString(USER_ID_CLAIM);
+        String userId = accessToken.getSubject();
         if (StringUtils.hasText(userId)) {
             return userId;
         } else {
