@@ -92,7 +92,7 @@ public class NoteServiceIntegrationTest {
         OffsetDateTime created = existingNote.getCreated();
         OffsetDateTime updated = existingNote.getLastUpdated();
 
-        Note updateNote = new Note(existingNote.getUserId(), "new Title", "New Content");
+        Note updateNote = new Note(existingNote.getUserId(), "Updated Title", "Updated Content");
         updateNote.setId(existingNote.getId());
 
         noteService.updateNote(updateNote);
@@ -101,8 +101,8 @@ public class NoteServiceIntegrationTest {
         assertThat(savedNotes).hasSize(1);
         Note savedNote = savedNotes.get(0);
         assertThat(savedNote.getUserId()).isEqualTo(existingNote.getUserId());
-        assertThat(savedNote.getTitle()).isEqualTo("New Title");
-        assertThat(savedNote.getContent()).isEqualTo("New Content");
+        assertThat(savedNote.getTitle()).isEqualTo("Updated Title");
+        assertThat(savedNote.getContent()).isEqualTo("Updated Content");
         assertThat(savedNote.getCreated()).isEqualTo(created);
         assertThat(savedNote.getLastUpdated()).isAfter(updated);
     }
