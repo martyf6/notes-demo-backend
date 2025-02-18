@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -63,6 +64,7 @@ public class NotesControllerIntegrationTest {
                                 jwt.subject(existingNote.getUserId()))))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedNoteJSON));
+        verify(noteService).getNoteByUserId(existingNote.getId(), existingNote.getUserId());
     }
 
     @Test
@@ -79,6 +81,7 @@ public class NotesControllerIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title").value("Note not found"))
                 .andExpect(jsonPath("$.detail").value("The requested note could not be found."));
+        verify(noteService).getNoteByUserId(noteId, userId);
     }
 
     @Test
@@ -97,6 +100,7 @@ public class NotesControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(noteAPI)))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(expectedNoteJSON));
+        verify(noteService).createNote(any(Note.class));
     }
 
     @Test
@@ -116,6 +120,7 @@ public class NotesControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(noteAPI)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value("Updated content."));
+        verify(noteService).updateNote(any(Note.class));
     }
 
     @Test
@@ -135,17 +140,18 @@ public class NotesControllerIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title").value("Note not found"))
                 .andExpect(jsonPath("$.detail").value("The requested note could not be found."));
+        verify(noteService).updateNote(any(Note.class));
     }
 
     @Test
     void whenDeleteNote_thenNoteDeleted() throws Exception {
         Note existingNote = TestFixture.getExistingNote();
-        String userId = "user123";
 
         mockMvc.perform(delete(BASE_PATH + "/" + existingNote.getId())
                         .with(jwt().jwt(jwt ->
-                                jwt.subject(userId))))
+                                jwt.subject(existingNote.getUserId()))))
                 .andExpect(status().isNoContent());
+        verify(noteService).deleteNoteByUserId(existingNote.getId(), existingNote.getUserId());
     }
 
     @Test
@@ -162,5 +168,6 @@ public class NotesControllerIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title").value("Note not found"))
                 .andExpect(jsonPath("$.detail").value("The requested note could not be found."));
+        verify(noteService).deleteNoteByUserId(noteId, userId);
     }
 }
